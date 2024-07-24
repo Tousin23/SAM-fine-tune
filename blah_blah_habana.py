@@ -53,7 +53,7 @@ training_args = GaudiTrainingArguments(
     output_dir='./logs',
     use_habana=True,
     use_lazy_mode=True,
-    gaudi_config_name= Habana/t5
+    gaudi_config_name= "Habana/t5"
 )
 
 
