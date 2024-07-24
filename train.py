@@ -15,6 +15,7 @@ from src.lora import LoRA_sam
 import matplotlib.pyplot as plt
 import yaml
 import torch.nn.functional as F
+import habana_frameworks.torch.core as htcore
 """
 This file is used to train a LoRA_sam model. I use that monai DiceLoss for the training. The batch size and number of epochs are taken from the configuration file.
 The model is saved at the end as a safetensor.
@@ -40,7 +41,8 @@ optimizer = Adam(model.image_encoder.parameters(), lr=config_file["TRAIN"]["LEAR
 seg_loss = monai.losses.DiceCELoss(sigmoid=True, squared_pred=True, reduction='mean')
 num_epochs = config_file["TRAIN"]["NUM_EPOCHS"]
 
-device = "cuda" if torch.cuda.is_available() else "cpu"
+#device = "cuda" if torch.cuda.is_available() else "cpu"
+device = torch.device("hpu")
 # Set model to train and into the device
 model.train()
 model.to(device)
@@ -64,6 +66,7 @@ for epoch in range(num_epochs):
       loss.backward()
       # optimize
       optimizer.step()
+      htcore.mark_step()
       epoch_losses.append(loss.item())
 
     print(f'EPOCH: {epoch}')
