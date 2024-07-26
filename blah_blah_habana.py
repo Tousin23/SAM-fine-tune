@@ -47,8 +47,8 @@ val_tokenized_dataset.set_format(type='torch', columns=['input_ids', 'attention_
 
 
 training_args = GaudiTrainingArguments(
-    per_device_train_batch_size=16,
-    per_device_eval_batch_size=16,
+    per_device_train_batch_size=64,
+    per_device_eval_batch_size=64,
     num_train_epochs=5,
     output_dir='./logs',
     use_habana=True,
